@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive Shopping List</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f0f8ff;
+        color: #333;
+      }
+
+      h1 {
+        text-align: center;
+        color: #2c3e50;
+      }
+
+      #shopping-list {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      #shopping-list li {
+        margin: 10px 0;
+        padding: 10px;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      #shopping-list li.purchased {
+        text-decoration: line-through;
+        background-color: #e0e0e0;
+        color: #888;
+      }
+
+      input[type="text"] {
+        width: 70%;
+        padding: 10px;
+        margin-right: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+      }
+
+      button {
+        padding: 10px 15px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #2980b9;
+      }
+
+      #clear-btn {
+        background-color: #e74c3c;
+        margin-top: 10px;
+      }
+
+      #clear-btn:hover {
+        background-color: #c0392b;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h1>Shopping List</h1>
+    <div>
+      <input type="text" id="item-input" placeholder="Enter item" />
+      <button id="add-btn">Add</button>
+    </div>
+    <ul id="shopping-list"></ul>
+    <button id="clear-btn">Clear List</button>
+
+    <script>
+      // Array to store shopping list items
+      let shoppingList = [];
+
+      // DOM elements
+      const itemInput = document.getElementById("item-input");
+      const addBtn = document.getElementById("add-btn");
+      const clearBtn = document.getElementById("clear-btn");
+      const shoppingListEl = document.getElementById("shopping-list");
+
+      // Function to render the shopping list
+      function renderList() {
+        shoppingListEl.innerHTML = "";
+        shoppingList.forEach((item, index) => {
+          const li = document.createElement("li");
+          li.textContent = item.name;
+          if (item.purchased) {
+            li.classList.add("purchased");
+          }
+
+          const purchaseBtn = document.createElement("button");
+          purchaseBtn.textContent = item.purchased ? "Unpurchase" : "Purchase";
+          purchaseBtn.onclick = () => togglePurchase(index);
+
+          li.appendChild(purchaseBtn);
+          shoppingListEl.appendChild(li);
+        });
+      }
+
+      // Function to add an item to the list
+      function addItem() {
+        const itemName = itemInput.value.trim();
+        if (itemName) {
+          shoppingList.push({ name: itemName, purchased: false });
+          itemInput.value = "";
+          renderList();
+        }
+      }
+
+      // Function to toggle purchase status
+      function togglePurchase(index) {
+        shoppingList[index].purchased = !shoppingList[index].purchased;
+        renderList();
+      }
+
+      // Function to clear the list
+      function clearList() {
+        shoppingList = [];
+        renderList();
+      }
+
+      // Event listeners
+      addBtn.addEventListener("click", addItem);
+      clearBtn.addEventListener("click", clearList);
+      itemInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") addItem();
+      });
+
+      // Initial render
+      renderList();
+    </script>
+  </body>
+</html>
